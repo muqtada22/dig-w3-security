@@ -4,9 +4,16 @@ require('dotenv').config()
 const LOCALHOST = process.env.HOST;
 const DB_PORT = process.env.PORT;
 const DATABASE = process.env.DATABASE;
-
 const seed = require('./rolesSeeder')
-mongoose.connect(`mongodb://${LOCALHOST}:${DB_PORT}/${DATABASE}`);
+if(process.env.ENVIRONMENT == 'development')
+{
+    mongoose.connect(`mongodb://${LOCALHOST}:${DB_PORT}/${DATABASE}`);
+}
+else
+{
+    console.log('con string is: ', process.env.MONGODB_CLOUD_CON);
+    mongoose.connect(process.env.MONGODB_CLOUD_CON);
+}
 const db = mongoose.connection;
 db.on('error',(e)=>{
     console.error(e)
